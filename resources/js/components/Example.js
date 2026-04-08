@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
+
 import {
     Table,
     Button,
@@ -19,20 +20,37 @@ export default class Example extends Component {
         this.state = {
             posts: [], //response of API into post state
             newPostModal: false,
+            newPostData: { title: "", content: "", user_id: "" },
         };
     }
-    loadPost() { //Fetch post data using API 
+    loadPost() {
         axios.get("http://127.0.0.1:8000/api/posts").then((response) => {
             this.setState({
                 posts: response.data,
+            }).catch((error) => {
+                console.error("Error loading posts:", error.response || error); // Log error when loading posts
             });
         });
     }
-    componentWillMount() { //Start writing the data when open the website
+
+    addPost() {
+        axios
+            .post("http://127.0.0.1:8000/api/post", this.state.newPostData)
+            .then((response) => {
+                let { posts } = this.state;
+                this.loadPost();
+                this.setState({
+                    posts,
+                    newPostModal: false,
+                    newPostData: { title: "", content: "", user_id: "" },
+                });
+            });
+    }
+    componentWillMount() {
         this.loadPost();
     }
     toggleNewPostModal() {
-        this.setState({ newPostModal: true });
+        this.setState({ newPostModal: !this.state.newPostModal }); // Open the dialog!
     }
     render() {
         let posts = this.state.posts.map((post) => {
@@ -42,8 +60,14 @@ export default class Example extends Component {
                     <td>{post.title}</td>
                     <td>{post.content}</td>
                     <td>
-                        <Button color="success" size="sm" className="mr-2">Edit</Button>
-                        <Button color="danger" size="sm" className="mr-2">Delete</Button>
+                        <Button color="success" size="sm" className="mr-2">
+                            {" "}
+                            Edit{" "}
+                        </Button>
+                        <Button color="danger" size="sm" className="mr-2">
+                            {" "}
+                            Delete{" "}
+                        </Button>
                     </td>
                 </tr>
             );
@@ -63,35 +87,77 @@ export default class Example extends Component {
                     isOpen={this.state.newPostModal}
                     toggle={this.toggleNewPostModal.bind(this)}
                 >
-                    <ModalHeader toggle={this.toggleNewPostModal.bind(this)}>
-                        Create a New Post
+                    <ModalHeader>
+                        {" "}
+                        Add New Post
+                        <Button
+                            className="close"
+                            onClick={this.addPost.bind(this)}
+                            style={{
+                                position: "absolute",
+                                top: "10px",
+                                right: "10px",
+                                backgroundColor: "transparent",
+                                border: "none",
+                                fontSize: "20px",
+                                color: "red",
+                            }}
+                        >
+                            <span>&times;</span> {/* Custom "X" character */}
+                        </Button>
                     </ModalHeader>
                     <ModalBody>
                         <FormGroup>
                             <Label for="title">Title</Label>
-                            <Input id="title"></Input>
+                            <Input
+                                id="title"
+                                value={this.state.newPostData.title}
+                                onChange={(e) => {
+                                    let { newPostData } = this.state;
+                                    newPostData.title = e.target.value;
+                                    this.setState({ newPostData });
+                                }}
+                            ></Input>
                         </FormGroup>
                         <FormGroup>
                             <Label for="content">Content</Label>
-                            <Input id="content"></Input>
+                            <Input
+                                id="content"
+                                value={this.state.newPostData.content}
+                                onChange={(e) => {
+                                    let { newPostData } = this.state;
+                                    newPostData.content = e.target.value;
+                                    this.setState({ newPostData });
+                                }}
+                            ></Input>
                         </FormGroup>
                         <FormGroup>
                             <Label for="user_id">User ID</Label>
-                            <Input id="user_id"></Input>
+                            <Input
+                                id="user_id"
+                                value={this.state.newPostData.user_id}
+                                onChange={(e) => {
+                                    let { newPostData } = this.state;
+                                    newPostData.user_id = e.target.value;
+                                    this.setState({ newPostData });
+                                }}
+                            ></Input>
                         </FormGroup>
                     </ModalBody>
                     <ModalFooter>
                         <Button
                             color="primary"
-                            onClick={this.toggleNewPostModal.bind(this)}
+                            onClick={this.addPost.bind(this)}
                         >
-                            Add Post
+                            {" "}
+                            Add Post{" "}
                         </Button>{" "}
                         <Button
                             color="secondary"
                             onClick={this.toggleNewPostModal.bind(this)}
                         >
-                            Cancel
+                            {" "}
+                            Cancel{" "}
                         </Button>
                     </ModalFooter>
                 </Modal>
