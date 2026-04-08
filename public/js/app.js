@@ -5183,6 +5183,13 @@ var Example = /*#__PURE__*/function (_Component) {
         title: "",
         content: "",
         user_id: ""
+      },
+      updatePostModal: false,
+      updatePostData: {
+        id: "",
+        title: "",
+        content: "",
+        user_id: ""
       }
     };
     return _this;
@@ -5192,11 +5199,9 @@ var Example = /*#__PURE__*/function (_Component) {
     key: "loadPost",
     value: function loadPost() {
       var _this2 = this;
-      axios__WEBPACK_IMPORTED_MODULE_11___default().get("http://127.0.0.1:8000/api/posts").then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_11___default().get('http://127.0.0.1:8000/api/posts').then(function (response) {
         _this2.setState({
           posts: response.data
-        })["catch"](function (error) {
-          console.error("Error loading posts:", error.response || error); // Log error when loading posts
         });
       });
     }
@@ -5204,7 +5209,7 @@ var Example = /*#__PURE__*/function (_Component) {
     key: "addPost",
     value: function addPost() {
       var _this3 = this;
-      axios__WEBPACK_IMPORTED_MODULE_11___default().post("http://127.0.0.1:8000/api/post", this.state.newPostData).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_11___default().post('http://127.0.0.1:8000/api/post', this.state.newPostData).then(function (response) {
         var posts = _this3.state.posts;
         _this3.loadPost();
         _this3.setState({
@@ -5228,12 +5233,58 @@ var Example = /*#__PURE__*/function (_Component) {
     value: function toggleNewPostModal() {
       this.setState({
         newPostModal: !this.state.newPostModal
-      }); // Open the dialog!
+      });
+    }
+  }, {
+    key: "callUpdatePost",
+    value: function callUpdatePost(id, title, content, user_id) {
+      this.setState({
+        updatePostData: {
+          id: id,
+          title: title,
+          content: content,
+          user_id: user_id
+        },
+        updatePostModal: !this.state.updatePostModal
+      });
+    }
+  }, {
+    key: "updatePost",
+    value: function updatePost() {
+      var _this4 = this;
+      var _this$state$updatePos = this.state.updatePostData,
+        title = _this$state$updatePos.title,
+        content = _this$state$updatePos.content,
+        user_id = _this$state$updatePos.user_id;
+      axios__WEBPACK_IMPORTED_MODULE_11___default().put('http://127.0.0.1:8000/api/post/' + this.state.updatePostData.id, {
+        title: title,
+        content: content,
+        user_id: user_id
+      }).then(function (response) {
+        _this4.loadPost();
+        _this4.setState({
+          //after execution, set all states to false
+          updatePostModal: false,
+          updatePostData: {
+            id: "",
+            title: "",
+            content: "",
+            user_id: ""
+          }
+        });
+      });
+    }
+  }, {
+    key: "toggleUpdatePostModal",
+    value: function toggleUpdatePostModal() {
+      this.setState({
+        updatePostModal: !this.state.updatePostModal
+      });
     }
   }, {
     key: "render",
     value: function render() {
-      var _this4 = this;
+      var _this5 = this;
       var posts = this.state.posts.map(function (post) {
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("tr", {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("td", {
@@ -5243,16 +5294,17 @@ var Example = /*#__PURE__*/function (_Component) {
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("td", {
             children: post.content
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("td", {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_2__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_2__["default"], {
               color: "success",
               size: "sm",
               className: "mr-2",
-              children: [" ", "Edit", " "]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_2__["default"], {
+              onClick: _this5.callUpdatePost.bind(_this5, post.id, post.title, post.content, post.user_id),
+              children: "Edit "
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_2__["default"], {
               color: "danger",
               size: "sm",
               className: "mr-2",
-              children: [" ", "Delete", " "]
+              children: " Delete "
             })]
           })]
         }, post.id);
@@ -5266,23 +5318,9 @@ var Example = /*#__PURE__*/function (_Component) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_3__["default"], {
           isOpen: this.state.newPostModal,
           toggle: this.toggleNewPostModal.bind(this),
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_4__["default"], {
-            children: [" ", "Add New Post", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_2__["default"], {
-              className: "close",
-              onClick: this.addPost.bind(this),
-              style: {
-                position: "absolute",
-                top: "10px",
-                right: "10px",
-                backgroundColor: "transparent",
-                border: "none",
-                fontSize: "20px",
-                color: "red"
-              },
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
-                children: "\xD7"
-              }), " "]
-            })]
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            toggle: this.toggleNewPostModal.bind(this),
+            children: " Add New Post"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_5__["default"], {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_8__["default"], {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_10__["default"], {
@@ -5292,9 +5330,9 @@ var Example = /*#__PURE__*/function (_Component) {
                 id: "title",
                 value: this.state.newPostData.title,
                 onChange: function onChange(e) {
-                  var newPostData = _this4.state.newPostData;
+                  var newPostData = _this5.state.newPostData;
                   newPostData.title = e.target.value;
-                  _this4.setState({
+                  _this5.setState({
                     newPostData: newPostData
                   });
                 }
@@ -5307,9 +5345,9 @@ var Example = /*#__PURE__*/function (_Component) {
                 id: "content",
                 value: this.state.newPostData.content,
                 onChange: function onChange(e) {
-                  var newPostData = _this4.state.newPostData;
+                  var newPostData = _this5.state.newPostData;
                   newPostData.content = e.target.value;
-                  _this4.setState({
+                  _this5.setState({
                     newPostData: newPostData
                   });
                 }
@@ -5322,23 +5360,87 @@ var Example = /*#__PURE__*/function (_Component) {
                 id: "user_id",
                 value: this.state.newPostData.user_id,
                 onChange: function onChange(e) {
-                  var newPostData = _this4.state.newPostData;
+                  var newPostData = _this5.state.newPostData;
                   newPostData.user_id = e.target.value;
-                  _this4.setState({
+                  _this5.setState({
                     newPostData: newPostData
                   });
                 }
               })]
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_6__["default"], {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_2__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_2__["default"], {
               color: "primary",
               onClick: this.addPost.bind(this),
-              children: [" ", "Add Post", " "]
-            }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_2__["default"], {
+              children: " Add Post "
+            }), ' ', /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_2__["default"], {
               color: "secondary",
               onClick: this.toggleNewPostModal.bind(this),
-              children: [" ", "Cancel", " "]
+              children: " Cancel "
+            })]
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          isOpen: this.state.updatePostModal,
+          toggle: this.toggleUpdatePostModal.bind(this),
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            toggle: this.toggleUpdatePostModal.bind(this),
+            children: " Update Post"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_5__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_8__["default"], {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_10__["default"], {
+                "for": "title",
+                children: "Title"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_9__["default"], {
+                id: "title",
+                value: this.state.updatePostData.title,
+                onChange: function onChange(e) {
+                  var updatePostData = _this5.state.updatePostData;
+                  updatePostData.title = e.target.value;
+                  _this5.setState({
+                    updatePostData: updatePostData
+                  });
+                }
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_8__["default"], {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_10__["default"], {
+                "for": "content",
+                children: "Content"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_9__["default"], {
+                id: "content",
+                value: this.state.updatePostData.content,
+                onChange: function onChange(e) {
+                  var updatePostData = _this5.state.updatePostData;
+                  updatePostData.content = e.target.value;
+                  _this5.setState({
+                    updatePostData: updatePostData
+                  });
+                }
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_8__["default"], {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_10__["default"], {
+                "for": "user_id",
+                children: "User ID"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_9__["default"], {
+                id: "user_id",
+                value: this.state.updatePostData.user_id,
+                onChange: function onChange(e) {
+                  var updatePostData = _this5.state.updatePostData;
+                  updatePostData.user_id = e.target.value;
+                  _this5.setState({
+                    updatePostData: updatePostData
+                  });
+                }
+              })]
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_6__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_2__["default"], {
+              color: "primary",
+              onClick: this.updatePost.bind(this),
+              children: " Edit Post "
+            }), ' ', /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_2__["default"], {
+              color: "secondary",
+              onClick: this.toggleUpdatePostModal.bind(this),
+              children: " Cancel "
             })]
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_7__["default"], {
@@ -5363,8 +5465,8 @@ var Example = /*#__PURE__*/function (_Component) {
   }]);
 }(react__WEBPACK_IMPORTED_MODULE_0__.Component);
 
-if (document.getElementById("example")) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1__.render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(Example, {}), document.getElementById("example"));
+if (document.getElementById('example')) {
+  react_dom__WEBPACK_IMPORTED_MODULE_1__.render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(Example, {}), document.getElementById('example'));
 }
 
 /***/ },
