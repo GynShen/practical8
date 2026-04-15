@@ -4,7 +4,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { FormGroup, Label, Input } from "reactstrap";
 import axios from "axios";
 
-export default class Basic extends Component {
+export default class Example extends Component {
     constructor() {
         super();
         this.state = {
@@ -99,5 +99,5 @@ export default class Basic extends Component {
 }
 
 if (document.getElementById("basic")) {
-    ReactDOM.render(<Basic />, document.getElementById("basic"));
+    ReactDOM.render(<Example />, document.getElementById("basic"));
 }

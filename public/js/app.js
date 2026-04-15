@@ -5138,7 +5138,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Basic)
+/* harmony export */   "default": () => (/* binding */ Example)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
@@ -5172,11 +5172,11 @@ function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf 
 
 
 
-var Basic = /*#__PURE__*/function (_Component) {
-  function Basic() {
+var Example = /*#__PURE__*/function (_Component) {
+  function Example() {
     var _this;
-    _classCallCheck(this, Basic);
-    _this = _callSuper(this, Basic);
+    _classCallCheck(this, Example);
+    _this = _callSuper(this, Example);
     _this.state = {
       // Zone1: This to define variables
       newPostModal: false,
@@ -5189,8 +5189,8 @@ var Basic = /*#__PURE__*/function (_Component) {
     return _this;
   }
   // Zone2: This to define the methods
-  _inherits(Basic, _Component);
-  return _createClass(Basic, [{
+  _inherits(Example, _Component);
+  return _createClass(Example, [{
     key: "toggleNewPostModal",
     value: function toggleNewPostModal() {
       this.setState({
@@ -5295,7 +5295,7 @@ var Basic = /*#__PURE__*/function (_Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0__.Component);
 
 if (document.getElementById("basic")) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1__.render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(Basic, {}), document.getElementById("basic"));
+  react_dom__WEBPACK_IMPORTED_MODULE_1__.render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(Example, {}), document.getElementById("basic"));
 }
 
 /***/ },
