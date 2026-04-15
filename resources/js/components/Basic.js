@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { FormGroup, Label, Input } from "reactstrap";
+import axios from "axios";
 
 export default class Basic extends Component {
     constructor() {
@@ -15,6 +16,18 @@ export default class Basic extends Component {
     // Zone2: This to define the methods
     toggleNewPostModal() {
         this.setState({ newPostModal: !this.state.newPostModal });
+    }
+
+    addPost() {
+        axios
+            .post("http://127.0.0.1:8000/api/post", this.state.newPostData)
+            .then((response) => {
+                let { posts } = this.state;
+                this.setState({
+                    newPostModal: false, //Hide modal after create post
+                    newPostData: { title: "", content: "", user_id: "" }, //Clear modal input
+                });
+            });
     }
 
     render() {
@@ -76,7 +89,7 @@ export default class Basic extends Component {
                         </FormGroup>
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="primary">Do Something</Button>
+                        <Button color="primary" onClick={this.addPost.bind(this)}>Save the Post</Button>
                         <Button color="secondary">Cancel</Button>
                     </ModalFooter>
                 </Modal>
