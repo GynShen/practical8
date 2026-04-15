@@ -34,6 +34,7 @@
     </div>
     <div id="example"></div>
     <div id="test"></div>
+    <div id="basic"></div>
 </body>
 <script src="/js/app.js"></script>
 

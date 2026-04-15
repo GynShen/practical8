@@ -14,3 +14,4 @@ require('./bootstrap');
 
 require('./components/Test');
 require('./components/Example'); 
+require('./components/Basic');
